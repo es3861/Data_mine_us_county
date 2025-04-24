@@ -90,4 +90,12 @@ col_names = ['slope_2022', 'slope_2023', 'acc_2022', 'acc_2023', 'steady_slope',
 df_col_names = [status + '-' + col for status, col in product(['married', 'unmarried'], col_names)]
 ts_df.columns = df_col_names
 
+# Computing the percentage slope rather than the absolute change. 
+for status in ['married', 'unmarried']:
+    base_col = f"{status}-val_2022"  
+    ts_df[f"{status}-pct_slope_2022"] = (ts_df[f"{status}-slope_2022"] / ts_df[base_col])
+    ts_df[f"{status}-pct_slope_2023"] = (ts_df[f"{status}-slope_2023"] / ts_df[base_col])
+    ts_df[f"{status}-pct_acc_2022"] = (ts_df[f"{status}-acc_2022"] / ts_df[base_col])
+    ts_df[f"{status}-pct_acc_2023"] = (ts_df[f"{status}-acc_2023"] / ts_df[base_col])
+
 ts_df.to_csv('curve_feats_counties.csv', quoting=csv.QUOTE_NONNUMERIC)
